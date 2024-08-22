@@ -1,17 +1,17 @@
 from db_connect import connect_db, Error
 
-def add_user(): 
+def add_user():
     conn = connect_db()
     if conn is not None:
         try:
             cursor = conn.cursor()
-            user_name = input("Enter the name of the user: ").title()
-            user_email = input("Enter the email of the user: ")
-            user_phone = input("Enter the phone number of the user: ")
-            query = "INSERT INTO users (user_name, user_email, user_phone) VALUES (%s, %s, %s)"
-            cursor.execute(query, (user_name, user_email, user_phone))
+            name = input("Enter the name of the user: ").title() 
+            library_id = input("Enter a unique library ID: ")
+            new_users = (name, library_id)
+            query = "INSERT INTO users (name , library_id) VALUES (%s, %s)"
+            cursor.execute(query, (new_users))
             conn.commit() 
-            print(f"New user {user_name} added successfully!")
+            print(f"New user:  {name}  Library ID # {library_id} added successfully!")
         except Error as e:
             print(f"Error: {e}")
         finally:

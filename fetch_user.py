@@ -1,21 +1,27 @@
 from db_connect import connect_db, Error
 
-def fetch_user():
+def search_for_user():
     conn = connect_db()
     if conn is not None:
         try:
+            user_id = input("Please enter the user id: ")
             cursor = conn.cursor()
-            user_name = input("Enter the name of the user: ").title()
-            query = "SELECT * FROM users WHERE user_name = %s"
-            cursor.execute(query, (user_name,))
-            for id, user_name, user_email, user_phone in cursor.fetchall():
-                print(f"{id}: {user_name}, {user_email}, {user_phone}")
+
+            query = "SELECT * FROM users_new WHERE id = %s;"
+
+            cursor.execute(query, (user_id,))
+
+            id, name, library_id = cursor.fetchone()
+            print(f"{id}: {name}, {library_id}")
+
         except Error as e:
             print(f"Error: {e}")
+        
         finally:
             cursor.close()
-            conn.close()
+            conn.close() 
+            print("Connection successfully close")
 
 if __name__ == "__main__":
-    fetch_user()
+    search_for_user()
 

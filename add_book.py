@@ -8,18 +8,17 @@ def add_book():
             cursor = conn.cursor()
 
             title = input("Enter the title of the book: ").title()
-            author = input("Enter the author of the book: ").title()
-            genre = input("Enter the genre of the book: ").title()
-            isbn = input("Enter the ISBN of the book: ")
-            copies = input("Enter the number of copies: ")
+            isbn = input("Enter the ISBN of the book, no dashes necessary: ")
+            
+            author_id = int(input("Please enter the author id (numbers only): "))
+            
+            new_book = (title, isbn, author_id)
 
-            new_book = (title, author, genre, isbn, copies)
-
-            query = "INSERT INTO books (title, author, genre, isbn, copies) VALUES (%s, %s, %s, %s, %s)"
+            query = "INSERT INTO books (title, isbn, author_id) VALUES (%s, %s, %s)"
 
             cursor.execute(query, new_book)
             conn.commit() 
-            print(f"New book {title} added successfully!")
+            print(f"New book {title} has been added to the library- Thanks for the donation !")
 
         except Error as e:
             print(f"Error: {e}")
@@ -28,6 +27,7 @@ def add_book():
             if conn and conn.is_connected():
                 cursor.close()
                 conn.close()
+                print("Connection closed.")
 
 
 if __name__ == "__main__":

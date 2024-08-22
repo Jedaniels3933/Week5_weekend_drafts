@@ -1,14 +1,15 @@
 from db_connect import connect_db, Error
-def fetch_author():
+def show_author():
     conn = connect_db()
     if conn is not None:
         try:
+            author_id = input("Please enter the author id: ")
             cursor = conn.cursor()
-            author_name = input("Enter the name of the author: ").title()
-            query = "SELECT * FROM authors WHERE author_name = %s"
-            cursor.execute(query, (author_name,))
-            for id, author_name in cursor.fetchall():
-                print(f"{id}: {author_name}")
+            
+            query = "SELECT * FROM authors WHERE id = %s"
+            cursor.execute(query, (author_id,))
+            id, name, bio = cursor.fetchone()
+            print(f"{id}: {name}, {bio}")
         except Error as e:
             print(f"Error: {e}")
         finally:
@@ -16,4 +17,4 @@ def fetch_author():
             conn.close()
 
 if __name__ == "__main__":
-    fetch_author()      
+    show_author()      

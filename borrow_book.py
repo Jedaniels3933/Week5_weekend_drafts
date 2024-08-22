@@ -1,31 +1,36 @@
 from db_connect import connect_db, Error
 
-def borrow_book():
+def lend_a_book():
     conn = connect_db()
-
+  
     if conn is not None:
         try:
+            book_id = input(f"Please enter the book id: ")
             cursor = conn.cursor()
 
-            customer_id = input("Enter the customer ID: ")
-            book_id = input("Enter the book ID: ")
+            query = "UPDATE books SET availability = False WHERE id = %s" 
 
-            borrow_book(customer_id, book_id)
+            cursor.execute(query,(book_id,))
+            conn.commit()
 
-            query = "INSERT INTO borrowed_books (customer_id, book_id) VALUES (%s, %s)"
+            select_query = "SELECT * FROM books WHERE id = %s "
+            cursor.execute(select_query, (book_id,))
+           
 
-            cursor.execute(query, (customer_id, book_id))
-            conn.commit() 
-            print(f"Book borrowed successfully!")
+            id, title, author_id, isbn, availability = cursor.fetchone()
+            print(f"{id}: {title}, {author_id}, {isbn}, {availability}")
+            print(f"Book under the {title} was borrowed successfully")
 
         except Error as e:
             print(f"Error: {e}")
-
         finally:
-            if conn and conn.is_connected():
-                cursor.close()
-                conn.close()
+            cursor.close()
+            conn.close()
+            print("Connection successfully close")  
 
 if __name__ == "__main__":
-    borrow_book()
+    lend_a_book()
+
+
+           
     

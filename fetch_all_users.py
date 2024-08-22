@@ -4,10 +4,10 @@ def fetch_all_users():
     if conn is not None:
         try:
             cursor = conn.cursor()
-            query = "SELECT * FROM users"
+            query = "SELECT * FROM users_new;"
             cursor.execute(query)
-            for id, user_name, user_email, user_phone in cursor.fetchall():
-                print(f"{id}: {user_name}, {user_email}, {user_phone}")
+            for id, name, library_id in cursor.fetchall():
+                print(f"{id}: {name}, {library_id}")
         except Error as e:
             print(f"Error: {e}")
         finally:

@@ -1,5 +1,5 @@
 from db_connect import connect_db, Error
-def fetch_all_authors():
+def show_all_authors():
     conn = connect_db()
     if conn is not None:
         try:
@@ -15,4 +15,4 @@ def fetch_all_authors():
             conn.close()
 
 if __name__ == "__main__":
-    fetch_all_authors() 
+    show_all_authors() 

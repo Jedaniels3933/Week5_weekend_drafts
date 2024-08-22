@@ -1,17 +1,25 @@
 from db_connect import connect_db, Error
 
-def return_book():
+def give_book_back():
     conn = connect_db()
     if conn is not None:
         try:
+            book_id = input(f"Please enter the book id your will like to return: ")
             cursor = conn.cursor()
-            customer_id = input("Enter the customer ID: ")
-            book_id = input("Enter the book ID: ")
-            return_book(customer_id, book_id)
-            query = "DELETE FROM borrowed_books WHERE customer_id = %s AND book_id = %s"
-            cursor.execute(query, (customer_id, book_id))
-            conn.commit() 
-            print(f"Book returned successfully!")
+
+            query = "UPDATE books SET availability = True WHERE id = %s" 
+
+            cursor.execute(query,(book_id,))
+            conn.commit()
+
+            select_query = "SELECT * FROM books WHERE id = %s "
+            cursor.execute(select_query, (book_id,))
+            # breakpoint()
+
+            id, title, author_id, isbn, availability = cursor.fetchone()
+            print(f"{id}: {title}, {author_id}, {isbn}, {availability}")
+            print(f"{title} book, under {id} was returned successfully")
+
         except Error as e:
             print(f"Error: {e}")
         finally:
@@ -20,5 +28,5 @@ def return_book():
                 conn.close()
 
 if __name__ == "__main__":
-    return_book()   
+   give_book_back()   
 

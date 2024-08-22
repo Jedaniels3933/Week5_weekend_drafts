@@ -1,21 +1,25 @@
 from db_connect import connect_db, Error
 
-def search_book():
+def search_for_book():
         
-        conn = connect_db()
-        if conn is not None:
-            try:
-                cursor = conn.cursor()
-                title = input("Enter the title of the book: ").title()
-                query = "SELECT * FROM books WHERE title = %s"
-                cursor.execute(query, (title,))
-                for id, title, author, genre, isbn, copies in cursor.fetchall():
-                    print(f"{id}: {title}, {author}, {genre}, {isbn}, {copies}")
-            except Error as e:
-                print(f"Error: {e}")
-            finally:
-                cursor.close()
-                conn.close()
+    conn = connect_db()
+    if conn is not None:
+        try:
+            book_id = input("Please enter the book id: ")
+            cursor = conn.cursor()
+
+            query = "SELECT * FROM books WHERE id = %s"
+
+            cursor.execute(query, (book_id,))
+
+            id, title, author_id, isbn, availability = cursor.fetchone()
+            print(f"{id}: {title}, {author_id}, {isbn}, {availability}")
+
+        except Error as e:
+            print(f"Error: {e}")
+        finally:
+            cursor.close()
+            conn.close()
 
 if __name__ == "__main__":
-    search_book()   
+    search_for_book()   

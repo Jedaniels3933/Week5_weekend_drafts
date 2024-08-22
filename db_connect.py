@@ -24,6 +24,5 @@ def connect_db():
         return None
     
 
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+
     
